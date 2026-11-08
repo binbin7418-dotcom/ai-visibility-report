@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<!--
+  AI Visibility Report — experiment landing page (NOT published; draft for validation experiment)
+  FORM BACKEND: FormSubmit (no registration). Submissions go to binbin7418@gmail.com.
+  Endpoint activated 2026-11-08; if the action value is a random alias string, that is
+  FormSubmit's post-activation alias for the same inbox — keep it.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Visibility Report — Does AI mention your brand?</title>
+<meta name="description" content="A one-time, evidence-based report: we ask AI engines the questions your buyers ask, 3 samples per question, and show you the raw answers — plus what to fix.">
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161c26; --panel2:#1b2331; --line:#2b3648;
+    --ink:#e8edf4; --mut:#93a1b5; --acc:#f0b429; --acc2:#3fb68b; --bad:#e05d44;
+    --mono:"SFMono-Regular",ui-monospace,Menlo,Consolas,monospace;
+    --sans:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+  header{border-bottom:1px dashed var(--line);padding:18px 0}
+  .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .brand{font-family:var(--mono);font-size:15px;letter-spacing:.08em}
+  .brand b{color:var(--acc)}
+  .langbtn{background:none;border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer;font-family:var(--mono);font-size:13px}
+  .langbtn:hover{border-color:var(--acc)}
+  .hero{padding:56px 0 30px}
+  .kicker{font-family:var(--mono);color:var(--acc2);font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+  h1{font-size:42px;line-height:1.15;margin:14px 0 16px;max-width:760px}
+  h1 .hl{color:var(--acc)}
+  .sub{color:var(--mut);font-size:18px;max-width:700px}
+  .ticket{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:38px 0}
+  .tier{padding:26px 28px;background:var(--panel)}
+  .tier.full{background:var(--panel2);border-left:1px dashed var(--line)}
+  .tier h3{margin:0 0 4px;font-size:20px}
+  .price{font-family:var(--mono);font-size:30px;margin:6px 0 12px}
+  .price small{font-size:14px;color:var(--mut)}
+  .tier ul{margin:0;padding-left:18px;color:var(--mut)}
+  .tier li{margin:6px 0}
+  .tier li b{color:var(--ink)}
+  .cta{display:inline-block;margin-top:18px;background:var(--acc);color:#141414;font-weight:700;padding:12px 22px;border-radius:10px;text-decoration:none}
+  .cta.ghost{background:none;border:1px solid var(--acc);color:var(--acc)}
+  section{padding:26px 0}
+  h2{font-size:26px;margin:0 0 14px}
+  .how{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .step{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+  .step .n{font-family:var(--mono);color:var(--acc);font-size:13px}
+  .step p{color:var(--mut);margin:8px 0 0}
+  .honest{border:1px solid var(--line);border-left:4px solid var(--bad);border-radius:10px;padding:18px 22px;background:var(--panel)}
+  .honest p{color:var(--mut);margin:6px 0}
+  form{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px 28px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  label{display:block;font-size:14px;color:var(--mut);margin-bottom:6px}
+  input,textarea{width:100%;background:#0d1117;border:1px solid var(--line);border-radius:8px;color:var(--ink);padding:11px 12px;font-size:15px;font-family:var(--sans)}
+  input:focus,textarea:focus{outline:none;border-color:var(--acc)}
+  .full-row{grid-column:1/-1}
+  button[type=submit]{margin-top:18px;background:var(--acc);border:none;color:#141414;font-weight:700;font-size:16px;padding:13px 26px;border-radius:10px;cursor:pointer}
+  .fineprint{color:var(--mut);font-size:13px;margin-top:12px}
+  footer{border-top:1px dashed var(--line);padding:22px 0 40px;color:var(--mut);font-size:13px}
+  @media(max-width:760px){.ticket,.how,.grid{grid-template-columns:1fr}.tier.full{border-left:none;border-top:1px dashed var(--line)}h1{font-size:32px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap topbar">
+    <div class="brand">AI VISIBILITY <b>REPORT</b></div>
+    <button class="langbtn" id="langToggle" type="button">中文</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="kicker" data-en="One-time report · Raw answers included · No dashboard" data-zh="一次性报告 · 附原始答案 · 不是仪表盘订阅">One-time report · Raw answers included · No dashboard</div>
+    <h1 data-en="Do AI answers mention you — or only your competitors?" data-zh="AI 的回答里，有你，还是只有你的竞品？">Do AI answers mention you — or only <span class="hl">your competitors?</span></h1>
+    <p class="sub" data-en="Buyers now ask ChatGPT, Gemini and Perplexity before they Google. We ask those engines the exact questions your buyers ask — 3 samples per question, methodology disclosed — and hand you the raw answers plus a concrete fix list." data-zh="买家现在先问 ChatGPT、Gemini 和 Perplexity，再去 Google。我们把你买家会问的问题原样问给这些引擎——每题采样 3 次、方法全披露——把原始答案和一份能照着改的修复清单交给你。">Buyers now ask ChatGPT, Gemini and Perplexity before they Google. We ask those engines the exact questions your buyers ask — 3 samples per question, methodology disclosed — and hand you the raw answers plus a concrete fix list.</p>
+  </div>
+
+  <div class="ticket">
+    <div class="tier">
+      <h3 data-en="Free mini report" data-zh="免费迷你报告">Free mini report</h3>
+      <div class="price">$0</div>
+      <ul>
+        <li data-en="<b>3 questions</b> you choose, 3 samples each, 1 engine" data-zh="<b>3 个问题</b>（你来定），每题采样 3 次，1 个引擎"><b>3 questions</b> you choose, 3 samples each, 1 engine</li>
+        <li data-en="Mention rate for your brand + who showed up instead" data-zh="你的品牌提及率 + 实际出现的是谁">Mention rate for your brand + who showed up instead</li>
+        <li data-en="Your site's GEO readiness score (automated audit)" data-zh="你站点的 GEO 就绪度评分（自动审计）">Your site's GEO readiness score (automated audit)</li>
+        <li data-en="Delivered by email within 3 business days" data-zh="3 个工作日内邮件交付">Delivered by email within 3 business days</li>
+      </ul>
+      <a class="cta ghost" href="#apply" data-en="Apply for the free mini report" data-zh="申请免费迷你报告">Apply for the free mini report</a>
+    </div>
+    <div class="tier full">
+      <h3 data-en="Full AI Visibility Report" data-zh="完整版 AI 可见度报告">Full AI Visibility Report</h3>
+      <div class="price">$9 <small data-en="one-time" data-zh="一次性买断">one-time</small></div>
+      <ul>
+        <li data-en="<b>10 frozen questions</b> built from your market, 3 samples each" data-zh="<b>10 个冻结问题</b>（按你的市场定制），每题采样 3 次"><b>10 frozen questions</b> built from your market, 3 samples each</li>
+        <li data-en="Per-question results table with the <b>raw answers attached</b>" data-zh="逐题结果表，<b>附原始答案全文</b>">Per-question results table with the <b>raw answers attached</b></li>
+        <li data-en="Competitor co-mentions: who AI recommends instead of you, and why" data-zh="竞品共现：AI 推荐了谁而不是你，以及给出的理由">Competitor co-mentions: who AI recommends instead of you, and why</li>
+        <li data-en="Full site GEO readiness audit + a <b>prioritised fix list</b>" data-zh="完整站点 GEO 就绪审计 + <b>按优先级排好的修复清单</b>">Full site GEO readiness audit + a <b>prioritised fix list</b></li>
+        <li data-en="Delivered within 48 hours of payment" data-zh="付款后 48 小时内交付">Delivered within 48 hours of payment</li>
+      </ul>
+      <a class="cta" href="https://binbinster.gumroad.com/l/ai-visibility-report" data-en="Get the full report — $9 one-time" data-zh="购买完整版 — $9 一次性">Get the full report — $9 one-time</a>
+    </div>
+  </div>
+
+  <section>
+    <h2 data-en="How it works" data-zh="怎么运作">How it works</h2>
+    <div class="how">
+      <div class="step"><div class="n">STEP 01</div><p data-en="You tell us your brand, site and market below. We freeze a question bank — the wording never changes between samples, so results stay comparable." data-zh="在下面留下品牌、网站和行业。我们据此冻结一份问题库——采样之间 wording 不变，结果才可比。">You tell us your brand, site and market below. We freeze a question bank — the wording never changes between samples, so results stay comparable.</p></div>
+      <div class="step"><div class="n">STEP 02</div><p data-en="We ask each question 3 times and record every answer verbatim, including which brands and sources appear. One sample is a lottery ticket; three is a measurement." data-zh="每个问题问 3 次，逐字记录每次答案，包括出现了哪些品牌和来源。问 1 次是抽签，问 3 次才是测量。">We ask each question 3 times and record every answer verbatim, including which brands and sources appear. One sample is a lottery ticket; three is a measurement.</p></div>
+      <div class="step"><div class="n">STEP 03</div><p data-en="You get the report by email: mention rates, the raw answers, your readiness audit, and fixes ordered by impact — not a score with no instructions." data-zh="报告发到你的邮箱：提及率、原始答案、就绪度审计、按影响排序的修复项——不是一个没有下文的分数。">You get the report by email: mention rates, the raw answers, your readiness audit, and fixes ordered by impact — not a score with no instructions.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 data-en="See a real one first" data-zh="先看一份真的">See a real one first</h2>
+    <p class="sub" data-en="This sample report was run on our own product, PitchReel — real audit scores, real sampled answers, including the parts that look bad for us." data-zh="这份样例报告跑的是我们自己的产品 PitchReel——真实审计分、真实采样答案，包括对我们不利的部分。">This sample report was run on our own product, PitchReel — real audit scores, real sampled answers, including the parts that look bad for us.</p>
+    <p><a class="cta ghost" href="sample-report.html" data-en="Open the sample report" data-zh="打开样例报告">Open the sample report</a></p>
+  </section>
+
+  <section>
+    <div class="honest">
+      <h2 data-en="What this report is — and is not" data-zh="这份报告是什么、不是什么">What this report is — and is not</h2>
+      <p data-en="Sampling is done through AI provider APIs, not by sitting in front of the consumer apps. API answers and app answers can differ — the report states its channel and date on every page." data-zh="采样走 AI 服务商的 API，不是在消费者 App 界面前逐个提问。API 答案与 App 答案可能不同——报告每一页都标注通道和日期。">Sampling is done through AI provider APIs, not by sitting in front of the consumer apps. API answers and app answers can differ — the report states its channel and date on every page.</p>
+      <p data-en="AI answers vary from run to run. That is why every question is sampled 3 times and why we report rates and trends, never a single screenshot as proof." data-zh="AI 的答案每次都会变。所以每题采样 3 次、只报比率和趋势，绝不拿一张截图当证据。">AI answers vary from run to run. That is why every question is sampled 3 times and why we report rates and trends, never a single screenshot as proof.</p>
+      <p data-en="No report can guarantee that AI will cite or recommend you. Anyone who promises that is selling you a number, not evidence." data-zh="没有任何报告能保证 AI 会引用或推荐你。向你保证这一点的，是在卖数字，不是在给证据。">No report can guarantee that AI will cite or recommend you. Anyone who promises that is selling you a number, not evidence.</p>
+    </div>
+  </section>
+
+  <section id="apply">
+    <h2 data-en="Apply for the free mini report" data-zh="申请免费迷你报告">Apply for the free mini report</h2>
+    <form action="https://formsubmit.co/15e62058bf3b689a86293f1df8a55508" method="POST">
+      <input type="hidden" name="_subject" value="AI Visibility mini report application">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_captcha" value="false">
+      <div class="grid">
+        <div>
+          <label for="brand" data-en="Brand / product name" data-zh="品牌 / 产品名">Brand / product name</label>
+          <input id="brand" name="brand" type="text" required>
+        </div>
+        <div>
+          <label for="website" data-en="Website" data-zh="网站">Website</label>
+          <input id="website" name="website" type="url" placeholder="https://example.com" required>
+        </div>
+        <div>
+          <label for="industry" data-en="Industry / what you sell" data-zh="行业 / 你卖什么">Industry / what you sell</label>
+          <input id="industry" name="industry" type="text" required>
+        </div>
+        <div>
+          <label for="email" data-en="Email (report is delivered here)" data-zh="邮箱（报告交付到这里）">Email (report is delivered here)</label>
+          <input id="email" name="email" type="email" required>
+        </div>
+        <div class="full-row">
+          <label for="q1" data-en="Question 1 your buyers would ask AI" data-zh="你的买家会问 AI 的问题 1">Question 1 your buyers would ask AI</label>
+          <input id="q1" name="question_1" type="text" required>
+        </div>
+        <div class="full-row">
+          <label for="q2" data-en="Question 2" data-zh="问题 2">Question 2</label>
+          <input id="q2" name="question_2" type="text" required>
+        </div>
+        <div class="full-row">
+          <label for="q3" data-en="Question 3" data-zh="问题 3">Question 3</label>
+          <input id="q3" name="question_3" type="text" required>
+        </div>
+      </div>
+      <button type="submit" data-en="Send my application" data-zh="提交申请">Send my application</button>
+      <p class="fineprint" data-en="We reply by email. No subscription, no spam, no resale of your details." data-zh="我们用邮件回复。没有订阅、没有群发、不会转卖你的信息。">We reply by email. No subscription, no spam, no resale of your details.</p>
+    </form>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap" data-en="AI Visibility Report — a one-time measurement, sold once, delivered by email. Methodology and limitations are stated inside every report." data-zh="AI 可见度报告——一次性测量、一次性交付、邮件送达。方法与局限写在每一份报告里。">AI Visibility Report — a one-time measurement, sold once, delivered by email. Methodology and limitations are stated inside every report.</div>
+</footer>
+
+<script>
+  var zh = false;
+  document.getElementById('langToggle').addEventListener('click', function(){
+    zh = !zh;
+    this.textContent = zh ? 'EN' : '中文';
+    document.documentElement.lang = zh ? 'zh' : 'en';
+    document.querySelectorAll('[data-en]').forEach(function(el){
+      el.innerHTML = zh ? el.getAttribute('data-zh') : el.getAttribute('data-en');
+    });
+  });
+</script>
+</body>
+</html>
